@@ -249,7 +249,14 @@ public class ventanaVerificar extends javax.swing.JFrame {
         if (conectarBaseDatos()) {
             if ( buscarUsuario( txtUsuario.getText(), String.valueOf( txtContraseña.getPassword() ) ) ) {
                 JOptionPane.showMessageDialog(this, "Usuario existente");
+                
+                
+                
 
+                ////////////// NO FUNCIONA DEL TODO EL COMPROBAR QUE EXISTE EL USUARIO /////////////
+                
+                
+                
             } else {
                 try {
                     String nombre = txtUsuario.getText();
