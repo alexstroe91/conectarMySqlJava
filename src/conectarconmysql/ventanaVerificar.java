@@ -92,6 +92,11 @@ public class ventanaVerificar extends javax.swing.JFrame {
         btnCambiarContraseña.setText("Camibar Contraseña");
 
         btnNuevoUsuario.setText("Nuevo Usuario");
+        btnNuevoUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoUsuarioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -185,13 +190,31 @@ public class ventanaVerificar extends javax.swing.JFrame {
         txtContraseña.setText("");
     }
 
+    public boolean buscarUsuario(String usuario, String contraseña) {
+        boolean encontrado = false;
+        try {
+            ResultSet tabla = conseguirTabla();
+            while (tabla.next() && !encontrado) {
+                if (txtUsuario.getText().equals(tabla.getString("nombre")) && String.valueOf(txtContraseña.getPassword()).equals(tabla.getString("contraseña"))) {
+                    encontrado = true;
+                } else if (!encontrado) {
+                    return false;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+        return encontrado;
+    }
+
     private void btnAceptar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptar1ActionPerformed
 
         if (txtUsuario.getText().isEmpty() || String.valueOf(txtContraseña.getPassword()).isEmpty()) {
-            
+
             JOptionPane.showMessageDialog(this, "Tienes que rellenar los dos campos");
-            
-        } else{
+
+        } else {
             boolean encontrado = false;
             if (conectarBaseDatos()) {
                 try {
@@ -218,6 +241,39 @@ public class ventanaVerificar extends javax.swing.JFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         limpiarVentanas();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnNuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoUsuarioActionPerformed
+        Statement stmt;
+        ResultSet resultado = null;
+
+        if (conectarBaseDatos()) {
+            if ( buscarUsuario( txtUsuario.getText(), String.valueOf( txtContraseña.getPassword() ) ) ) {
+                JOptionPane.showMessageDialog(this, "Usuario existente");
+
+            } else {
+                try {
+                    String nombre = txtUsuario.getText();
+                    String contraseña = String.valueOf(txtContraseña.getPassword());
+                    stmt = conexion.createStatement();
+                    stmt.executeUpdate("INSERT INTO usuarios (nombre, contraseña) VALUES ('" + nombre + "', '" + contraseña + "')");
+
+                    if (buscarUsuario(nombre, contraseña)) {
+                        JOptionPane.showMessageDialog(this, "Usuario creado con exito");
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error creacion de usuario");
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Conexion fallida a la base de datos");
+
+        }
+    }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
 
     /**
      * @param args the command line arguments
