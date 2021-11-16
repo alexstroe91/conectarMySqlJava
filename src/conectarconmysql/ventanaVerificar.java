@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.*;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
 /**
@@ -50,12 +51,10 @@ public class ventanaVerificar extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         txtContraseña = new javax.swing.JPasswordField();
         txtUsuario = new javax.swing.JTextField();
-        btnAceptar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         btnAceptar1 = new javax.swing.JButton();
         btnCambiarContraseña = new javax.swing.JButton();
         btnNuevoUsuario = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        txtInfo = new javax.swing.JTextArea();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -76,7 +75,12 @@ public class ventanaVerificar extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Usuario");
 
-        btnAceptar.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnAceptar1.setText("Aceptar");
         btnAceptar1.addActionListener(new java.awt.event.ActionListener() {
@@ -89,23 +93,29 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
         btnNuevoUsuario.setText("Nuevo Usuario");
 
-        txtInfo.setColumns(20);
-        txtInfo.setRows(5);
-        jScrollPane3.setViewportView(txtInfo);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(113, 113, 113)
-                .addComponent(btnNuevoUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnCambiarContraseña)
-                .addContainerGap(54, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(164, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(155, 155, 155))
             .addGroup(layout.createSequentialGroup()
                 .addGap(117, 117, 117)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnNuevoUsuario)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCambiarContraseña))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(btnAceptar1)
+                                .addGap(58, 58, 58)
+                                .addComponent(btnCancelar)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3)
@@ -114,20 +124,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtContraseña)
                             .addComponent(txtUsuario))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnAceptar1)
-                        .addGap(58, 58, 58)
-                        .addComponent(btnAceptar))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(155, 155, 155))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(70, 70, 70))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,17 +141,15 @@ public class ventanaVerificar extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-                .addGap(12, 12, 12)
+                .addGap(56, 56, 56)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAceptar)
+                    .addComponent(btnCancelar)
                     .addComponent(btnAceptar1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCambiarContraseña)
                     .addComponent(btnNuevoUsuario))
-                .addGap(23, 23, 23))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -185,32 +180,44 @@ public class ventanaVerificar extends javax.swing.JFrame {
         return resultado;
     }
 
+    public void limpiarVentanas() {
+        txtUsuario.setText("");
+        txtContraseña.setText("");
+    }
+
     private void btnAceptar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptar1ActionPerformed
-        
-        txtInfo.setText("");
-        boolean encontrado = false;
-        if (conectarBaseDatos()) {
-            try {
-                String texto = "";
-                ResultSet tabla = conseguirTabla();
-                while(tabla.next() && !encontrado){
-                    if (txtUsuario.getText().equals(tabla.getString("nombre")) && String.valueOf(txtContraseña.getPassword()).equals(tabla.getString("contraseña"))){
-                        texto = "Usuario encontrado";
-                        txtInfo.setForeground(Color.decode("#0a8d20"));
-                        encontrado = true;
-                    }  else if (!encontrado) {
-                        texto = "Usuario no encontrado";
-                        txtInfo.setForeground(Color.red);                        
+
+        if (txtUsuario.getText().isEmpty() || String.valueOf(txtContraseña.getPassword()).isEmpty()) {
+            
+            JOptionPane.showMessageDialog(this, "Tienes que rellenar los dos campos");
+            
+        } else{
+            boolean encontrado = false;
+            if (conectarBaseDatos()) {
+                try {
+                    String texto = "";
+                    ResultSet tabla = conseguirTabla();
+                    while (tabla.next() && !encontrado) {
+                        if (txtUsuario.getText().equals(tabla.getString("nombre")) && String.valueOf(txtContraseña.getPassword()).equals(tabla.getString("contraseña"))) {
+                            texto = "Usuario encontrado";
+                            encontrado = true;
+                        } else if (!encontrado) {
+                            texto = "Usuario no encontrado";
+                        }
                     }
+                    JOptionPane.showMessageDialog(this, texto);
+                } catch (SQLException ex) {
+                    Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                txtInfo.setText(texto);
-            } catch (SQLException ex) {
-                Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                System.out.println("Conexión fallida");
             }
-        } else {
-            System.out.println("Conexión fallida");
         }
     }//GEN-LAST:event_btnAceptar1ActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        limpiarVentanas();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,20 +255,18 @@ public class ventanaVerificar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnAceptar1;
     private javax.swing.JButton btnCambiarContraseña;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnNuevoUsuario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JPasswordField txtContraseña;
-    private javax.swing.JTextArea txtInfo;
     private javax.swing.JTextField txtUsuario;
     // End of variables declaration//GEN-END:variables
 }
