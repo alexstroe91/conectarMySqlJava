@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 public class ventanaVerificar extends javax.swing.JFrame {
 
     Connection conexion = null;
+    
 
     /**
      * Creates new form ventanaVerificar
@@ -192,19 +193,22 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
     public boolean buscarUsuario(String usuario, String contraseña) {
         boolean encontrado = false;
+
         try {
-            ResultSet tabla = conseguirTabla();
-            while (tabla.next() && !encontrado) {
-                if (txtUsuario.getText().equals(tabla.getString("nombre")) && String.valueOf(txtContraseña.getPassword()).equals(tabla.getString("contraseña"))) {
-                    encontrado = true;
-                } else if (!encontrado) {
-                    return false;
-                }
+            Statement stmt = (Statement) conexion.createStatement();
+            ResultSet resultado = stmt.executeQuery("SELECT * FROM usuarios WHERE nombre = '" + usuario + "' and contraseña = '" + contraseña + "' ");
+
+            if (resultado.next()) {
+                encontrado = true;
             }
+
+            resultado.close();
+            stmt.close();
         } catch (SQLException ex) {
             Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+
         return encontrado;
     }
 
@@ -244,19 +248,10 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
     private void btnNuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoUsuarioActionPerformed
         Statement stmt;
-        ResultSet resultado = null;
 
         if (conectarBaseDatos()) {
-            if ( buscarUsuario( txtUsuario.getText(), String.valueOf( txtContraseña.getPassword() ) ) ) {
+            if (buscarUsuario(txtUsuario.getText(), String.valueOf(txtContraseña.getPassword())) == true) {
                 JOptionPane.showMessageDialog(this, "Usuario existente");
-                
-                
-                
-
-                ////////////// NO FUNCIONA DEL TODO EL COMPROBAR QUE EXISTE EL USUARIO /////////////
-                
-                
-                
             } else {
                 try {
                     String nombre = txtUsuario.getText();
