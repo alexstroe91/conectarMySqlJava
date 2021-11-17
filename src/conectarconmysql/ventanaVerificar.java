@@ -221,21 +221,27 @@ public class ventanaVerificar extends javax.swing.JFrame {
     public int confirmarNuevaContraseña(String contraseñaNueva, String confirmacionContraseñaNueva) {
 
         if (!contraseñaNueva.equals("") && !confirmacionContraseñaNueva.equals("")) {
-            if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
-                try {
-                    Statement stmt = conexion.createStatement();
-                    stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
 
-                    stmt.close();
+            if (validarContraseña(contraseñaNueva)) {
+                if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
+                    try {
+                        Statement stmt = conexion.createStatement();
+                        stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
 
-                    return 1;
-                } catch (SQLException ex) {
-                    Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
-                    return 2;
+                        stmt.close();
+
+                        return 1;
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+                        return 2;
+                    }
+                } else {
+                    return 4;
                 }
             } else {
-                return 4;
+                return 5;
             }
+
         } else {
             return 3;
         }
@@ -367,6 +373,8 @@ public class ventanaVerificar extends javax.swing.JFrame {
                     case 4:
                         JOptionPane.showMessageDialog(this, "Error : La confirmacion de la contraseña nueva no coincide.");
                         break;
+                    case 5:
+                        JOptionPane.showMessageDialog(this, "La contraseña no cumple los requisitos");
                 }
 
             } else {
