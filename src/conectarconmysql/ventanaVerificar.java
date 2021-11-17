@@ -216,6 +216,24 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
         return encontrado;
     }
+    
+    public boolean confirmarNuevaContraseña(String contraseñaNueva, String confirmacionContraseñaNueva) {
+
+        if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
+            try {
+                Statement stmt = conexion.createStatement();
+                stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
+
+                stmt.close();
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 
     private void btnAceptar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptar1ActionPerformed
 
@@ -284,23 +302,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
 
-    public boolean confirmarNuevaContraseña(String contraseñaNueva, String confirmacionContraseñaNueva) {
-
-        if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
-            try {
-                Statement stmt = conexion.createStatement();
-                stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
-
-                stmt.close();
-                return true;
-            } catch (SQLException ex) {
-                Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
+    
 
     private void btnCambiarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarContraseñaActionPerformed
         if (conectarBaseDatos()) {
