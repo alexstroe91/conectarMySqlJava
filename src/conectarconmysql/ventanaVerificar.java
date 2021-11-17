@@ -261,7 +261,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                 try {
                     String nombre = txtUsuario.getText();
                     String contraseña = String.valueOf(txtContraseña.getPassword());
-                    
+
                     stmt = conexion.createStatement();
                     stmt.executeUpdate("INSERT INTO usuarios (nombre, contraseña) VALUES ('" + nombre + "', '" + contraseña + "')");
 
@@ -284,24 +284,38 @@ public class ventanaVerificar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
 
+    public boolean confirmarNuevaContraseña(String contraseñaNueva, String confirmacionContraseñaNueva) {
+
+        if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
+            try {
+                Statement stmt = conexion.createStatement();
+                stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
+
+                stmt.close();
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
     private void btnCambiarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarContraseñaActionPerformed
         if (conectarBaseDatos()) {
+            
             if (buscarUsuario(txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()))) {
+
                 String contraseñaNueva = JOptionPane.showInputDialog("Introduce la nueva contraseña: ");
-                
                 String confirmacionContraseñaNueva = JOptionPane.showInputDialog("Confirma la contraseña: ");
-                
-                if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
-                    try {
-                        Statement stmt = conexion.createStatement();
-                        stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
-                        
-                        stmt.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+
+                if (confirmarNuevaContraseña(contraseñaNueva, confirmacionContraseñaNueva)){
+                    JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Contraseñas no coinciden");
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(this, ("El usuario introducido no existe o la contraseña es incorrecta"));
             }
