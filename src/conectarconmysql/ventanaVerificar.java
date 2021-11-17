@@ -170,7 +170,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
     public boolean conectarBaseDatos() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            conexion = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/gestionusuarios", "root", "");
+            conexion = (Connection) DriverManager.getConnection("jdbc:mysql://localhost/basedatoscasa", "root", "");
             return true;
 
         } catch (SQLException ex) {
