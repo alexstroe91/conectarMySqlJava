@@ -296,6 +296,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                         Statement stmt = conexion.createStatement();
                         stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
                         
+                        stmt.close();
                     } catch (SQLException ex) {
                         Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
                     }
