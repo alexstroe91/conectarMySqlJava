@@ -166,6 +166,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    ////////////////////////////////////////        METODOS        ////////////////////////////////////////
     public boolean conectarBaseDatos() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -216,24 +217,30 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
         return encontrado;
     }
-    
-    public boolean confirmarNuevaContraseña(String contraseñaNueva, String confirmacionContraseñaNueva) {
 
-        if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
-            try {
-                Statement stmt = conexion.createStatement();
-                stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
+    public int confirmarNuevaContraseña(String contraseñaNueva, String confirmacionContraseñaNueva) {
 
-                stmt.close();
-                return true;
-            } catch (SQLException ex) {
-                Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+        if (!contraseñaNueva.equals("") && !confirmacionContraseñaNueva.equals("")) {
+            if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
+                try {
+                    Statement stmt = conexion.createStatement();
+                    stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
+
+                    stmt.close();
+                    return 1;
+                } catch (SQLException ex) {
+                    Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+                    return 2;
+                }
+            } else {
+                return 4;
             }
         } else {
-            return false;
+            return 3;
         }
     }
+
+    ////////////////////////////////////////        BOTONES        ////////////////////////////////////////
 
     private void btnAceptar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptar1ActionPerformed
 
@@ -302,20 +309,28 @@ public class ventanaVerificar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
 
-    
-
     private void btnCambiarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarContraseñaActionPerformed
         if (conectarBaseDatos()) {
-            
+
             if (buscarUsuario(txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()))) {
 
                 String contraseñaNueva = JOptionPane.showInputDialog("Introduce la nueva contraseña: ");
                 String confirmacionContraseñaNueva = JOptionPane.showInputDialog("Confirma la contraseña: ");
 
-                if (confirmarNuevaContraseña(contraseñaNueva, confirmacionContraseñaNueva)){
-                    JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Contraseñas no coinciden");
+
+                switch (confirmarNuevaContraseña(contraseñaNueva, confirmacionContraseñaNueva)){
+                    case 1:
+                        JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
+                        break;
+                    case 2:
+                        JOptionPane.showMessageDialog(this, "Error : Contraseña no cambiada.");
+                        break;
+                    case 3:
+                        JOptionPane.showMessageDialog(this, "Error : Las contraseñas nuevas no pueden estar vacías.");
+                        break;
+                    case 4:
+                        JOptionPane.showMessageDialog(this, "Error : La confirmacion de la contraseña nueva no coincide.");
+                        
                 }
 
             } else {
@@ -324,9 +339,6 @@ public class ventanaVerificar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCambiarContraseñaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
