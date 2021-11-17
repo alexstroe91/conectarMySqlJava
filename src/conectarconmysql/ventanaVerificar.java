@@ -14,6 +14,7 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.*;
+import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 
@@ -24,7 +25,6 @@ import javax.swing.JTextArea;
 public class ventanaVerificar extends javax.swing.JFrame {
 
     Connection conexion = null;
-    
 
     /**
      * Creates new form ventanaVerificar
@@ -90,7 +90,12 @@ public class ventanaVerificar extends javax.swing.JFrame {
             }
         });
 
-        btnCambiarContraseña.setText("Camibar Contraseña");
+        btnCambiarContraseña.setText("Cambiar Contraseña");
+        btnCambiarContraseña.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCambiarContraseñaActionPerformed(evt);
+            }
+        });
 
         btnNuevoUsuario.setText("Nuevo Usuario");
         btnNuevoUsuario.addActionListener(new java.awt.event.ActionListener() {
@@ -276,6 +281,20 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnNuevoUsuarioActionPerformed
+
+    private void btnCambiarContraseñaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCambiarContraseñaActionPerformed
+        if (conectarBaseDatos()) {
+            if (buscarUsuario(txtUsuario.getText(), String.valueOf(txtContraseña.getPassword()))) {
+                String contraseñaNueva = JOptionPane.showInputDialog("Introduce la nueva contraseña: ");
+                
+                String confirmacionContraseñaNueva = JOptionPane.showInputDialog("Confirma la contraseña: ");
+                
+                
+            } else {
+                JOptionPane.showMessageDialog(this, ("El usuario introducido no existe o la contraseña es incorrecta"));
+            }
+        }
+    }//GEN-LAST:event_btnCambiarContraseñaActionPerformed
 
     /**
      * @param args the command line arguments
