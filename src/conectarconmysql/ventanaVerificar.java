@@ -14,6 +14,8 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.PreparedStatement;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
@@ -75,6 +77,12 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Usuario");
+
+        txtContraseña.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtContraseñaKeyPressed(evt);
+            }
+        });
 
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -382,6 +390,16 @@ public class ventanaVerificar extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnCambiarContraseñaActionPerformed
+
+    private void txtContraseñaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtContraseñaKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (validarContraseña(String.valueOf(txtContraseña.getPassword()))) {
+                JOptionPane.showMessageDialog(rootPane, "La contraseña cumple con los requisitos");
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "La contraseña NO cumple con los requisitos");
+            }
+        }
+    }//GEN-LAST:event_txtContraseñaKeyPressed
 
     ////////////////////////////////////////        ////////        ////////////////////////////////////////
     public static void main(String args[]) {
