@@ -227,7 +227,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                     stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
 
                     stmt.close();
-                    
+
                     return 1;
                 } catch (SQLException ex) {
                     Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
@@ -239,6 +239,38 @@ public class ventanaVerificar extends javax.swing.JFrame {
         } else {
             return 3;
         }
+    }
+
+    public boolean validarContraseña(String contraseña) {
+
+        char[] arrContraseña = contraseña.toCharArray();
+        int contadorMayus = 0;
+        boolean respuesta = true;
+
+        if (contraseña.length() < 8) {
+
+            respuesta = false;
+        }
+
+        if (Character.isDigit(arrContraseña[0])) {
+            respuesta = false;
+        }
+
+        for (int i = 0; i < arrContraseña.length; i++) {
+            if (Character.isUpperCase(arrContraseña[0])) {
+                contadorMayus++;
+            }
+
+            if (!Character.isLetterOrDigit(arrContraseña[0]) || String.valueOf(arrContraseña[0]) == "_") {
+                respuesta = false;
+            }
+        }
+
+        if (contadorMayus < 1) {
+            respuesta = false;
+        }
+
+        return respuesta;
     }
 
     ////////////////////////////////////////        BOTONES        ////////////////////////////////////////
@@ -279,26 +311,30 @@ public class ventanaVerificar extends javax.swing.JFrame {
 
     private void btnNuevoUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoUsuarioActionPerformed
         Statement stmt;
-
+        String contraseña = String.valueOf(txtContraseña.getPassword());
         if (conectarBaseDatos()) {
-            if (buscarUsuario(txtUsuario.getText(), String.valueOf(txtContraseña.getPassword())) == true) {
+            if (buscarUsuario(txtUsuario.getText(), contraseña) == true) {
                 JOptionPane.showMessageDialog(this, "Usuario existente");
             } else {
                 try {
                     String nombre = txtUsuario.getText();
-                    String contraseña = String.valueOf(txtContraseña.getPassword());
 
-                    stmt = conexion.createStatement();
-                    stmt.executeUpdate("INSERT INTO usuarios (nombre, contraseña) VALUES ('" + nombre + "', '" + contraseña + "')");
+                    if (validarContraseña(contraseña)) {
+                        stmt = conexion.createStatement();
+                        stmt.executeUpdate("INSERT INTO usuarios (nombre, contraseña) VALUES ('" + nombre + "', '" + contraseña + "')");
 
-                    if (buscarUsuario(nombre, contraseña)) {
-                        JOptionPane.showMessageDialog(this, "Usuario creado con exito");
+                        if (buscarUsuario(nombre, contraseña)) {
+                            JOptionPane.showMessageDialog(this, "Usuario creado con exito");
 
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Error creacion de usuario");
+                        }
+
+                        stmt.close();
                     } else {
-                        JOptionPane.showMessageDialog(this, "Error creacion de usuario");
+                        JOptionPane.showMessageDialog(this, "La contraseña no cumple los requisitos");
                     }
 
-                    stmt.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -318,8 +354,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                 String contraseñaNueva = JOptionPane.showInputDialog("Introduce la nueva contraseña: ");
                 String confirmacionContraseñaNueva = JOptionPane.showInputDialog("Confirma la contraseña: ");
 
-
-                switch (confirmarNuevaContraseña(contraseñaNueva, confirmacionContraseñaNueva)){
+                switch (confirmarNuevaContraseña(contraseñaNueva, confirmacionContraseñaNueva)) {
                     case 1:
                         JOptionPane.showMessageDialog(this, "Contraseña cambiada con éxito");
                         break;
@@ -340,6 +375,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCambiarContraseñaActionPerformed
 
+    ////////////////////////////////////////        ////////        ////////////////////////////////////////
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
