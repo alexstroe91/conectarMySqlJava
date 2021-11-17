@@ -261,6 +261,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                 try {
                     String nombre = txtUsuario.getText();
                     String contraseña = String.valueOf(txtContraseña.getPassword());
+                    
                     stmt = conexion.createStatement();
                     stmt.executeUpdate("INSERT INTO usuarios (nombre, contraseña) VALUES ('" + nombre + "', '" + contraseña + "')");
 
@@ -271,6 +272,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Error creacion de usuario");
                     }
 
+                    stmt.close();
                 } catch (SQLException ex) {
                     Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -289,6 +291,15 @@ public class ventanaVerificar extends javax.swing.JFrame {
                 
                 String confirmacionContraseñaNueva = JOptionPane.showInputDialog("Confirma la contraseña: ");
                 
+                if (contraseñaNueva.equals(confirmacionContraseñaNueva)) {
+                    try {
+                        Statement stmt = conexion.createStatement();
+                        stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
+                        
+                    } catch (SQLException ex) {
+                        Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 
             } else {
                 JOptionPane.showMessageDialog(this, ("El usuario introducido no existe o la contraseña es incorrecta"));
