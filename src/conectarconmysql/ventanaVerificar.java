@@ -227,6 +227,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                     stmt.executeUpdate("UPDATE usuarios SET contraseña = '" + contraseñaNueva + "' WHERE nombre = '" + txtUsuario.getText() + "'");
 
                     stmt.close();
+                    
                     return 1;
                 } catch (SQLException ex) {
                     Logger.getLogger(ventanaVerificar.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,7 +331,7 @@ public class ventanaVerificar extends javax.swing.JFrame {
                         break;
                     case 4:
                         JOptionPane.showMessageDialog(this, "Error : La confirmacion de la contraseña nueva no coincide.");
-                        
+                        break;
                 }
 
             } else {
